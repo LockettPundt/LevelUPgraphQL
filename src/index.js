@@ -1,34 +1,9 @@
 const { ApolloServer, gql } = require('apollo-server-express');
 const express = require('express');
-
-
+const movies  = require('../data/movieData');
+const typeDefs = require('../schema/schema');
 const app = express();
 
-const typeDefs = gql`
-
-  type Movie {
-    title: String
-    releaseDate: String
-    rating: Int
-  }
-  
-  type Query {
-    movies: [Movie],
-  }
-`;
-
-const movies = [
-  {
-    title: "5 deadly Venoms",
-    releaseDate: "10/10/1983",
-    rating: 5
-  },
-  {
-    title: "another movie",
-    releaseDate: "1/08/1976",
-    rating: 3
-  },
-];
 
 const resolvers = {
   Query: {

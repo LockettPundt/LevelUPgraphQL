@@ -8,6 +8,12 @@ const app = express();
 const resolvers = {
   Query: {
     movies: () => movies,
+    movie: (obj, arg, context, info) => {
+      const { id } = arg;
+      return movies.find(movie => {
+        return movie.id === id;
+      })
+    }
   },
 }
 

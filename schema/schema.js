@@ -25,6 +25,7 @@ const typeDefs = gql`
   
   type Query {
     movies: [Movie],
+    movie(id: ID): Movie,
   }
 `;
 

@@ -2,6 +2,7 @@ const { ApolloServer, gql } = require('apollo-server-express');
 const express = require('express');
 const movies  = require('../data/movieData');
 const typeDefs = require('../schema/schema');
+const { env } = require('process');
 const app = express();
 
 
@@ -25,4 +26,4 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app, path: '/graphql' });
 
-app.listen(5000, () => console.log('connected:  http://localhost:5000/graphql'));
+app.listen({port: env.process.PORT || 5000}, () => console.log('connected:  http://localhost:5000/graphql'));

@@ -1,6 +1,7 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
+  scalar Date
   
   enum Status {
     INTERESTED
@@ -12,9 +13,9 @@ const typeDefs = gql`
   type Movie {
     id: ID!
     title: String!
-    releaseDate: String
+    releaseDate: Date
     rating: Int
-    actor: [Actor]
+    actors: [Actor]
     status: Status
   }
   
@@ -27,6 +28,11 @@ const typeDefs = gql`
     movies: [Movie],
     movie(id: ID): Movie,
   }
+  
+  type Mutation {
+    addMovie(title: String, releaseDate: String, id: ID): [Movie]
+  },
+  
 `;
 
 module.exports = typeDefs;

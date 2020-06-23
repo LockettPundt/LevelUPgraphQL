@@ -1,6 +1,7 @@
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language')
 const {movies, actors}  = require('../data/movieData');
+const Movie = require('../models/MovieSchema');
 
 const resolvers = {
   Query: {
@@ -30,21 +31,19 @@ const resolvers = {
       console.log("checking to see if user has been authorized in the Mutation Query.", userId);
       // checks context to see if a valid user.
       if (userId) {
-        const newMovieList = [
-          ...movies,
-          movie,
-        ]
-        console.log("new list", newMovieList)
-        return newMovieList;
+        const newMovie = Movie.create({
+          ...movie
+        });
+        return [newMovie]
       }
       return movies;
     },
     
-    updateStatus: (obj, { status, id }, context) => {
+    updateStatus: async (obj, { status, id }, context) => {
       // context can also be destructured in the argument list.
       const { userId } = context;
       if (userId) {
-        const movieToUpdate = movies.find(movie => movie.id === id);
+        const movieToUpdate = await Movie.findOne({_id: id});
         console.log( `updating status of ${movieToUpdate.title} to ${status}`);
         movieToUpdate.status = status;
         return movieToUpdate;

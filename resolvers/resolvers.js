@@ -5,7 +5,10 @@ const Movie = require('../models/MovieSchema');
 
 const resolvers = {
   Query: {
-    movies: () => movies,
+    movies: async () => {
+      const movieList = await Movie.find();
+      return movieList;
+    },
     movie: (obj, arg, context, info) => {
       const { id } = arg;
       return movies.find(movie => {
@@ -17,7 +20,6 @@ const resolvers = {
     actors: (obj, arg, context) => {
       console.log("actors", obj.actors);
       const objActors = obj.actors.map(actor => actor.id);
-      // db call or static data reference.
       const actorProfiles = actors.filter(actor => {
         return objActors.includes(actor.id);
       });
@@ -39,14 +41,16 @@ const resolvers = {
       return movies;
     },
     
-    updateStatus: async (obj, { status, id }, context) => {
+    updateStatus: async (obj, arg, context) => {
       // context can also be destructured in the argument list.
+      const { status, id } = arg;
       const { userId } = context;
       if (userId) {
-        const movieToUpdate = await Movie.findOne({_id: id});
-        console.log( `updating status of ${movieToUpdate.title} to ${status}`);
-        movieToUpdate.status = status;
-        return movieToUpdate;
+        
+        const movieToUpdate = await Movie.updateOne({_id: id}, { status: status });
+        const movieById = await Movie.findOne({_id: id});
+        console.log( `updating status of ${movieById.title} to ${status}`);
+        return movieById;
       }
       return 'sorry charlie';
     },

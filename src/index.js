@@ -1,11 +1,18 @@
+require('dotenv').config();
 const { ApolloServer, gql } = require('apollo-server-express');
 const express = require('express');
-
+const mongoose = require('mongoose');
 const typeDefs = require('../schema/schema');
-const { env } = require('process');
-
 const resolvers = require('../resolvers/resolvers');
 const app = express();
+
+mongoose.connect(process.env.DB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  dbName: process.env.DB_NAME,
+})
+  .then(() => console.log(`🔥connected to ${process.env.DB_NAME}`))
+  .catch((err) => console.log(err));
 
 
 const server = new ApolloServer({
@@ -18,7 +25,7 @@ const server = new ApolloServer({
     // returns a user object or grants access for the user
     // or you could return an error so that a user is blocked from 
     // posting a mutation.
-    // here is a hardcoded user auth.
+    // here is a hardcoded user auth. :Grapes
     const fakeUserAuth = {
       userId: '12345',
       name: 'lockett',
@@ -31,4 +38,4 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app, path: '/graphql' });
 
-app.listen({port: process.env.PORT || 5000}, () => console.log('connected:  http://localhost:5000/graphql'));
+app.listen({port: process.env.PORT || 5000}, () => console.log('🔥connected:  http://localhost:5000/graphql'));

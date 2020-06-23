@@ -3,6 +3,17 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
   scalar Date
   
+  # to create a fragment for a specific type, 
+  # use this syntax in the query itself.
+  
+  # fragment Meta on Movie {
+  # title
+  # rating
+  # releaseDate
+  # status
+  # }
+
+  
   enum Status {
     INTERESTED
     NOT_INTERESTED
@@ -29,8 +40,23 @@ const typeDefs = gql`
     movie(id: ID): Movie,
   }
   
+  input ActorInput {
+    id: ID
+    name: String
+  }
+  
+  input MovieInput {
+    id: ID
+    title: String
+    releaseDate: Date
+    rating: Int
+    status: Status
+    actors: [ActorInput]
+  }
+  
   type Mutation {
-    addMovie(title: String, releaseDate: String, id: ID): [Movie]
+    addMovie(movie: MovieInput): [Movie],
+    updateStatus(id: ID, status: Status): Movie,
   },
   
 `;

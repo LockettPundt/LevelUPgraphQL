@@ -54,6 +54,10 @@ const typeDefs = gql`
     actors: [ActorInput]
   }
   
+  type Subscription {
+    movieAdded: Movie
+  }
+  
   type Mutation {
     addMovie(movie: MovieInput): [Movie],
     updateStatus(id: ID, status: Status): Movie,
